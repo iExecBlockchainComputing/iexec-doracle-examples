@@ -20,7 +20,7 @@
   "dependencies": {
 		"chai": "^4.2.0",
     "ethereumjs-util": "^5.2.0",
-    "iexec-doracle-base": "0.0.1",
+    "iexec-doracle-base": "^0.0.2",
     "iexec-poco": "^3.0.35",
     "iexec-solidity": "^0.0.6",
     "multiaddr": "^6.0.6",
