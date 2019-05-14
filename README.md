@@ -61,17 +61,15 @@ Deployed addresses
 
 1. **Kovan:**
 
-	price oracle: `https://kovan.etherscan.io/address/0xc4f503fea0102b826b12fa75feeedf3b519c8b59`
+	price oracle: `https://kovan.etherscan.io/address/0x3b9f1a9aecb1991f3818f45bd4cc735f4bee93ac`
 
-	app whitelist: `https://kovan.etherscan.io/address/0x7c788c2b85e20b4fa25bd579a6b1d0218d86bdd1`
+	app whitelist: `https://kovan.etherscan.io/address/0x651a09cdff5a6669ea8bf05be11eff4aa9cbfdaf`
 
 	whitelist contains:
 
-	* `0x84D080a8c17c3784C269435fA82D4b8426Dd65a7` → `0x87cd9afeb72ecb2d7286f44b9ce8a75d7391898b450bafc577c2012d2a684549` (0.0.1)
-	* `0xa40e5E7cD39302BBF13E60413db87Df568C04B1E` → `0x629ef3bab7a0abfef062d957753b9f34fe82a4c2d94d4895a0473d18eb9a929b` (0.0.2)
-	* `0x538D8E5B3Ef93A6E44FC308E94a04ecB413b7fbE` → `0x66efe1b2fc835c450e8ee2ea82591af1cd4eb98245d7965a5ae24ef56c3baf32` (0.0.3 on 3.0.30)
+	* `0xf92f39545340ce2fd6f4248a689fca4f660ae42f`
+	* `0xe01bccbcab54c42f999b6ce88d63d3a5e96cfdb7`
 
 	Whitelist is administered by:
 
-	* `0x7bd4783FDCAD405A28052a0d1f11236A741da593` → `0xd3516e017d3a68257be86c2da5aa273f19d25b66c3dd62e96923f18a3922bb5b`
-	* `0x7859821024E633C5dC8a4FcF86fC52e7720Ce525` → `0x37c512bbaf358829ca29749fd301fe49f45127f458bf631cc40190fc69a2c850`
+	* `0x7bd4783FDCAD405A28052a0d1f11236A741da593`
