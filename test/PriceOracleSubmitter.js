@@ -48,31 +48,17 @@ contract('PriceOracle', async (accounts) => {
 	var DatasetInstance    = null;
 	var WorkerpoolInstance = null;
 
-	var apporder         = null;
-	var workerpoolorder1 = null;
-	var workerpoolorder2 = null;
-	var requestorder     = null;
+	var apporder        = null;
+	var workerpoolorder = null;
+	var requestorder    = null;
 
-	var deal = null;
-	var task = null;
+	var deal   = null;
+	var task   = null;
+	var worker = null;
+
+	var date, value, id, details, result;
 
 	var PriceOracleInstance = null;
-
-	const date       = Date.now();
-	const details    = "usd-rlc";
-	const value      = 1889387687;
-
-	const id         = web3.utils.keccak256(details);
-	const parameters = JSON.stringify({date,details});
-	const result     = web3.eth.abi.encodeParameters(['uint256','string','uint256'],[date,details,value]);
-
-	const workers     = [
-		// { address: worker1, enclave: sgxEnclave,             raw: web3.utils.keccak256(result) },
-		{ address: worker1, enclave: constants.NULL.ADDRESS, raw: web3.utils.keccak256(result) },
-		{ address: worker2, enclave: constants.NULL.ADDRESS, raw: web3.utils.keccak256(result) },
-		{ address: worker3, enclave: constants.NULL.ADDRESS, raw: web3.utils.keccak256(result) },
-	];
-	const trusttarget = 2 ** workers.length;
 
 	var totalgas = 0;
 
@@ -221,7 +207,7 @@ contract('PriceOracle', async (accounts) => {
 			AppInstance.address,
 			constants.NULL.ADDRESS,
 			WorkerpoolInstance.address,
-			"0x0000000000000000000000000000000000000000000000000000000000000000",
+			constants.NULL.BYTES32,
 			0,
 		);
 	});
@@ -231,9 +217,9 @@ contract('PriceOracle', async (accounts) => {
 		apporder = odbtools.signAppOrder(
 			{
 				app:                AppInstance.address,
-				appprice:           3,
+				appprice:           0,
 				volume:             1000,
-				tag:                "0x0000000000000000000000000000000000000000000000000000000000000000",
+				tag:                constants.NULL.BYTES32,
 				datasetrestrict:    constants.NULL.ADDRESS,
 				workerpoolrestrict: constants.NULL.ADDRESS,
 				requesterrestrict:  constants.NULL.ADDRESS,
@@ -245,11 +231,11 @@ contract('PriceOracle', async (accounts) => {
 		workerpoolorder = odbtools.signWorkerpoolOrder(
 			{
 				workerpool:        WorkerpoolInstance.address,
-				workerpoolprice:   25,
+				workerpoolprice:   0,
 				volume:            1000,
-				tag:               "0x0000000000000000000000000000000000000000000000000000000000000000",
+				tag:               constants.NULL.BYTES32,
 				category:          0,
-				trust:             trusttarget,
+				trust:             100,
 				apprestrict:       constants.NULL.ADDRESS,
 				datasetrestrict:   constants.NULL.ADDRESS,
 				requesterrestrict: constants.NULL.ADDRESS,
@@ -258,27 +244,30 @@ contract('PriceOracle', async (accounts) => {
 			},
 			wallets.addressToPrivate(scheduler)
 		);
-		requestorder = odbtools.signRequestOrder(
-			{
-				app:                AppInstance.address,
-				appmaxprice:        3,
-				dataset:            constants.NULL.ADDRESS,
-				datasetmaxprice:    0,
-				workerpool:         constants.NULL.ADDRESS,
-				workerpoolmaxprice: 25,
-				volume:             1,
-				tag:                "0x0000000000000000000000000000000000000000000000000000000000000000",
-				category:           0,
-				trust:              trusttarget,
-				requester:          user,
-				beneficiary:        user,
-				callback:           PriceOracleInstance.address,
-				params:             parameters,
-				salt:               web3.utils.randomHex(32),
-				sign:               constants.NULL.SIGNATURE,
-			},
-			wallets.addressToPrivate(user)
-		);
+
+		const tx        = await PriceOracleInstance.submit({ from: user, gas: constants.AMOUNT_GAS_PROVIDED });
+		const [ evABI ] = IexecClerkInstance.abi.filter(o => o.name === 'BroadcastRequestOrder' && o.type == 'event');
+		const [ ev    ] = tx.receipt.rawLogs.filter(l => l.topics.includes(evABI.signature));
+		const decoded   = web3.eth.abi.decodeLog(evABI.inputs, ev.data, ev.topics);
+
+		requestorder = {
+			app:                decoded.requestorder.app,
+			appmaxprice:        decoded.requestorder.appmaxprice,
+			dataset:            decoded.requestorder.dataset,
+			datasetmaxprice:    decoded.requestorder.datasetmaxprice,
+			workerpool:         decoded.requestorder.workerpool,
+			workerpoolmaxprice: decoded.requestorder.workerpoolmaxprice,
+			volume:             decoded.requestorder.volume,
+			tag:                decoded.requestorder.tag,
+			category:           decoded.requestorder.category,
+			trust:              decoded.requestorder.trust,
+			requester:          decoded.requestorder.requester,
+			beneficiary:        decoded.requestorder.beneficiary,
+			callback:           decoded.requestorder.callback,
+			params:             decoded.requestorder.params,
+			salt:               decoded.requestorder.salt,
+			sign:               decoded.requestorder.sign,
+		};
 
 		// Market
 		txMined = await IexecClerkInstance.matchOrders(apporder, constants.NULL.DATAORDER, workerpoolorder, requestorder, { from: user, gasLimit: constants.AMOUNT_GAS_PROVIDED });
@@ -305,12 +294,30 @@ contract('PriceOracle', async (accounts) => {
 		);
 	}
 
+	it("[setup] Compute", async () => {
+		const args        = (await IexecClerkInstance.viewDeal(deal)).params.split(' ');
+		/*const*/ details = args.slice(0,3).join('-');
+		/*const*/ date    = args[3];
+		/*const*/ value   = 1889387687;
+		/*const*/ id      = web3.utils.keccak256(details);
+		/*const*/ result  = web3.eth.abi.encodeParameters(['uint256','string','uint256'],[date,details,value]);
+
+		workers = [
+			{
+				address:     worker1,
+				enclave:     constants.NULL.ADDRESS,
+				callback:    result,
+				determinism: web3.utils.keccak256(result)
+			},
+		];
+	});
+
 	it("[setup] Contribute", async () => {
 		for (w of workers)
 		{
 			txMined = await sendContribution(
 				await odbtools.signAuthorization({ worker: w.address, taskid: task, enclave: w.enclave }, scheduler),
-				await (w.enclave == constants.NULL.ADDRESS ? x => x : x => odbtools.signContribution(x, w.enclave))(odbtools.sealByteResult(task, w.raw, w.address))
+				await (w.enclave == constants.NULL.ADDRESS ? x => x : x => odbtools.signContribution(x, w.enclave))(odbtools.sealByteResult(task, w.determinism, w.address))
 			);
 			totalgas += txMined.receipt.gasUsed;
 		}
@@ -319,7 +326,7 @@ contract('PriceOracle', async (accounts) => {
 	it("[setup] Reveal", async () => {
 		for (w of workers)
 		{
-			txMined = await IexecHubInstance.reveal(task, odbtools.hashByteResult(task, w.raw).digest, { from: w.address, gas: constants.AMOUNT_GAS_PROVIDED });
+			txMined = await IexecHubInstance.reveal(task, odbtools.hashByteResult(task, w.determinism).digest, { from: w.address, gas: constants.AMOUNT_GAS_PROVIDED });
 			totalgas += txMined.receipt.gasUsed;
 		}
 	});

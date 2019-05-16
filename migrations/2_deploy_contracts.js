@@ -5,7 +5,8 @@ var IexecClerk         = artifacts.require("iexec-poco/IexecClerk");
 var AppRegistry        = artifacts.require("iexec-poco/AppRegistry");
 var DatasetRegistry    = artifacts.require("iexec-poco/DatasetRegistry");
 var WorkerpoolRegistry = artifacts.require("iexec-poco/WorkerpoolRegistry");
-var PriceOracle        = artifacts.require("PriceOracle");
+// var PriceOracle        = artifacts.require("PriceOracle");
+var PriceOracle        = artifacts.require("PriceOracleSubmitter");
 
 module.exports = async function(deployer, network, accounts)
 {

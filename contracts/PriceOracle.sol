@@ -16,7 +16,7 @@ contract PriceOracle is Ownable, IexecDoracle
 
 	mapping(bytes32 => timedValue) public values;
 
-	event ValueChange(
+	event ValueUpdated(
 		bytes32 indexed id,
 		bytes32 indexed oracleCallID,
 		uint256 oldDate,
@@ -60,7 +60,7 @@ contract PriceOracle is Ownable, IexecDoracle
 		// Process results
 		bytes32 id = keccak256(bytes(details));
 		require(values[id].date < date, "new-value-is-too-old");
-		emit ValueChange(id, _oracleCallID, values[id].date, values[id].value, date, value);
+		emit ValueUpdated(id, _oracleCallID, values[id].date, values[id].value, date, value);
 		values[id].oracleCallID = _oracleCallID;
 		values[id].date         = date;
 		values[id].value        = value;
