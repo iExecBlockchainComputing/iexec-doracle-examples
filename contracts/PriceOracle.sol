@@ -1,4 +1,4 @@
-pragma solidity ^0.5.7;
+pragma solidity ^0.5.8;
 pragma experimental ABIEncoderV2;
 
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
@@ -28,8 +28,7 @@ contract PriceOracle is Ownable, IexecDoracle
 	// Use _iexecHubAddr to force use of custom iexechub, leave 0x0 for autodetect
 	constructor(address _iexecHubAddr)
 	public IexecDoracle(_iexecHubAddr)
-	{
-	}
+	{}
 
 	function updateEnv(
 	  address _authorizedApp

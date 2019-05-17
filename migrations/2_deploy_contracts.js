@@ -1,12 +1,14 @@
-var RLC                = artifacts.require("rlc-faucet-contract/RLC");
-var IexecODBLibOrders  = artifacts.require("iexec-poco/IexecODBLibOrders");
-var IexecHub           = artifacts.require("iexec-poco/IexecHub");
-var IexecClerk         = artifacts.require("iexec-poco/IexecClerk");
-var AppRegistry        = artifacts.require("iexec-poco/AppRegistry");
-var DatasetRegistry    = artifacts.require("iexec-poco/DatasetRegistry");
-var WorkerpoolRegistry = artifacts.require("iexec-poco/WorkerpoolRegistry");
-// var PriceOracle        = artifacts.require("PriceOracle");
-var PriceOracle        = artifacts.require("PriceOracleSubmitter");
+var RLC                  = artifacts.require("rlc-faucet-contract/RLC");
+var IexecODBLibOrders    = artifacts.require("iexec-poco/IexecODBLibOrders");
+var IexecHub             = artifacts.require("iexec-poco/IexecHub");
+var IexecClerk           = artifacts.require("iexec-poco/IexecClerk");
+var AppRegistry          = artifacts.require("iexec-poco/AppRegistry");
+var DatasetRegistry      = artifacts.require("iexec-poco/DatasetRegistry");
+var WorkerpoolRegistry   = artifacts.require("iexec-poco/WorkerpoolRegistry");
+
+var PriceOracle          = artifacts.require("PriceOracle");
+var PriceOracleRequester = artifacts.require("PriceOracleRequester");
+var IexecRequesterProxy  = artifacts.require("IexecRequesterProxy");
 
 module.exports = async function(deployer, network, accounts)
 {
@@ -90,5 +92,15 @@ module.exports = async function(deployer, network, accounts)
 	await deployer.deploy(PriceOracle, IexecHubInstance.address);
 	PriceOracleInstance = await PriceOracle.deployed();
 	console.log("PriceOracle deployed at address: " + PriceOracleInstance.address);
+
+	await deployer.deploy(PriceOracleRequester, IexecHubInstance.address);
+	PriceOracleRequesterInstance = await PriceOracleRequester.deployed();
+	console.log("PriceOracleRequester deployed at address: " + PriceOracleRequesterInstance.address);
+
+	await deployer.link(IexecODBLibOrders, IexecRequesterProxy);
+	// await deployer.deploy(IexecRequesterProxy);
+	// await deployer.deploy(IexecRequesterProxy, IexecHubInstance.address);
+	// IexecRequesterProxyInstance = await IexecRequesterProxy.deployed();
+	// console.log("IexecRequesterProxy deployed at address: " + IexecRequesterProxyInstance.address);
 
 };

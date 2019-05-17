@@ -1,18 +1,16 @@
-pragma solidity ^0.5.7;
+pragma solidity ^0.5.8;
 pragma experimental ABIEncoderV2;
 
-import "./libs/Buffer.sol";
-import "./PriceOracle.sol";
+import "../libs/Buffer.sol";
+import "../PriceOracle.sol";
 
-contract PriceOracleSubmitter is PriceOracle
+contract PriceOracleRequester is PriceOracle
 {
 	using Buffer for Buffer.buffer;
 
-	// Use _iexecHubAddr to force use of custom iexechub, leave 0x0 for autodetect
 	constructor(address _iexecHubAddr)
 	public PriceOracle(_iexecHubAddr)
-	{
-	}
+	{}
 
 	function uint2str(uint256 _i)
 	public pure returns (string memory)
@@ -68,8 +66,8 @@ contract PriceOracleSubmitter is PriceOracle
 		order.params             = makeParams("BTC", "USD", 9, now); // string
 		order.salt               = bytes32(0);                       // bytes32 → OK ?
 
-		m_iexecClerk.signRequestOrder(order);
-		m_iexecClerk.broadcastRequestOrder(order);
+		iexecClerk.signRequestOrder(order);
+		iexecClerk.broadcastRequestOrder(order);
 	}
 
 }

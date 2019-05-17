@@ -7,9 +7,7 @@ var WorkerpoolRegistry = artifacts.require("../node_modules/iexec-poco/contracts
 var App                = artifacts.require("../node_modules/iexec-poco/contracts/App.sol");
 var Dataset            = artifacts.require("../node_modules/iexec-poco/contracts/Dataset.sol");
 var Workerpool         = artifacts.require("../node_modules/iexec-poco/contracts/Workerpool.sol");
-
-// var PriceOracle = artifacts.require("./PriceOracle.sol");
-var PriceOracle = artifacts.require("./PriceOracleSubmitter.sol");
+var PriceOracle        = artifacts.require("./PriceOracle.sol");
 
 const { shouldFail } = require('openzeppelin-test-helpers');
 const   multiaddr    = require('multiaddr');

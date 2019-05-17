@@ -1,15 +1,13 @@
-var RLC                = artifacts.require("../node_modules/rlc-faucet-contract/contracts/RLC.sol");
-var IexecHub           = artifacts.require("../node_modules/iexec-poco/contracts/IexecHub.sol");
-var IexecClerk         = artifacts.require("../node_modules/iexec-poco/contracts/IexecClerk.sol");
-var AppRegistry        = artifacts.require("../node_modules/iexec-poco/contracts/AppRegistry.sol");
-var DatasetRegistry    = artifacts.require("../node_modules/iexec-poco/contracts/DatasetRegistry.sol");
-var WorkerpoolRegistry = artifacts.require("../node_modules/iexec-poco/contracts/WorkerpoolRegistry.sol");
-var App                = artifacts.require("../node_modules/iexec-poco/contracts/App.sol");
-var Dataset            = artifacts.require("../node_modules/iexec-poco/contracts/Dataset.sol");
-var Workerpool         = artifacts.require("../node_modules/iexec-poco/contracts/Workerpool.sol");
-
-// var PriceOracle = artifacts.require("./PriceOracle.sol");
-var PriceOracle = artifacts.require("./PriceOracleSubmitter.sol");
+var RLC                  = artifacts.require("../node_modules/rlc-faucet-contract/contracts/RLC.sol");
+var IexecHub             = artifacts.require("../node_modules/iexec-poco/contracts/IexecHub.sol");
+var IexecClerk           = artifacts.require("../node_modules/iexec-poco/contracts/IexecClerk.sol");
+var AppRegistry          = artifacts.require("../node_modules/iexec-poco/contracts/AppRegistry.sol");
+var DatasetRegistry      = artifacts.require("../node_modules/iexec-poco/contracts/DatasetRegistry.sol");
+var WorkerpoolRegistry   = artifacts.require("../node_modules/iexec-poco/contracts/WorkerpoolRegistry.sol");
+var App                  = artifacts.require("../node_modules/iexec-poco/contracts/App.sol");
+var Dataset              = artifacts.require("../node_modules/iexec-poco/contracts/Dataset.sol");
+var Workerpool           = artifacts.require("../node_modules/iexec-poco/contracts/Workerpool.sol");
+var PriceOracleRequester = artifacts.require("./PriceOracleRequester.sol");
 
 const { shouldFail } = require('openzeppelin-test-helpers');
 const   multiaddr    = require('multiaddr');
@@ -22,7 +20,7 @@ function extractEvents(txMined, address, name)
 	return txMined.logs.filter((ev) => { return ev.address == address && ev.event == name });
 }
 
-contract('PriceOracle', async (accounts) => {
+contract('PriceOracleRequester', async (accounts) => {
 
 	assert.isAtLeast(accounts.length, 10, "should have at least 10 accounts");
 	let iexecAdmin      = accounts[0];
@@ -58,7 +56,7 @@ contract('PriceOracle', async (accounts) => {
 
 	var date, value, id, details, result;
 
-	var PriceOracleInstance = null;
+	var PriceOracleRequesterInstance = null;
 
 	var totalgas = 0;
 
@@ -77,9 +75,9 @@ contract('PriceOracle', async (accounts) => {
 		AppRegistryInstance        = await AppRegistry.deployed();
 		DatasetRegistryInstance    = await DatasetRegistry.deployed();
 		WorkerpoolRegistryInstance = await WorkerpoolRegistry.deployed();
-		PriceOracleInstance        = await PriceOracle.deployed();
+		PriceOracleRequesterInstance        = await PriceOracleRequester.deployed();
 
-		console.log("PriceOracleInstance:", PriceOracleInstance.address);
+		console.log("PriceOracleRequesterInstance:", PriceOracleRequesterInstance.address);
 
 		odbtools.setup({
 			name:              "iExecODB",
@@ -203,7 +201,7 @@ contract('PriceOracle', async (accounts) => {
 	});
 
 	it("[Setup] Oracle setup", async () => {
-		await PriceOracleInstance.updateEnv(
+		await PriceOracleRequesterInstance.updateEnv(
 			AppInstance.address,
 			constants.NULL.ADDRESS,
 			WorkerpoolInstance.address,
@@ -245,7 +243,7 @@ contract('PriceOracle', async (accounts) => {
 			wallets.addressToPrivate(scheduler)
 		);
 
-		const tx        = await PriceOracleInstance.submit({ from: user, gas: constants.AMOUNT_GAS_PROVIDED });
+		const tx        = await PriceOracleRequesterInstance.submit({ from: user, gas: constants.AMOUNT_GAS_PROVIDED });
 		const [ evABI ] = IexecClerkInstance.abi.filter(o => o.name === 'BroadcastRequestOrder' && o.type == 'event');
 		const [ ev    ] = tx.receipt.rawLogs.filter(l => l.topics.includes(evABI.signature));
 		const decoded   = web3.eth.abi.decodeLog(evABI.inputs, ev.data, ev.topics);
@@ -341,13 +339,13 @@ contract('PriceOracle', async (accounts) => {
 	});
 
 	it("Process Oracle", async () => {
-		const valueBefore = await PriceOracleInstance.values(id);
+		const valueBefore = await PriceOracleRequesterInstance.values(id);
 		assert.equal(valueBefore.date,    0 );
 		assert.equal(valueBefore.details, "");
 		assert.equal(valueBefore.value,   0 );
 
-		txMined = await PriceOracleInstance.processResult(task);
-		events = extractEvents(txMined, PriceOracleInstance.address, "ValueUpdated");
+		txMined = await PriceOracleRequesterInstance.processResult(task);
+		events = extractEvents(txMined, PriceOracleRequesterInstance.address, "ValueUpdated");
 		assert.equal(events[0].args.id,                  id   );
 		assert.equal(events[0].args.oldDate.toNumber(),  0    );
 		assert.equal(events[0].args.oldValue.toNumber(), 0    );
@@ -355,7 +353,7 @@ contract('PriceOracle', async (accounts) => {
 		assert.equal(events[0].args.newValue.toNumber(), value);
 
 		totalgas += txMined.receipt.gasUsed;
-		const valueAfter = await PriceOracleInstance.values(id);
+		const valueAfter = await PriceOracleRequesterInstance.values(id);
 		assert.equal(valueAfter.date,    date   );
 		assert.equal(valueAfter.details, details);
 		assert.equal(valueAfter.value,   value  );

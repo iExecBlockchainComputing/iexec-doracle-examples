@@ -20,9 +20,9 @@
   "dependencies": {
 		"chai": "^4.2.0",
     "ethereumjs-util": "^5.2.0",
-    "iexec-doracle-base": "^0.0.2",
+    "iexec-doracle-base": "^0.0.4",
     "iexec-poco": "^3.0.35",
-    "iexec-solidity": "^0.0.6",
+    "iexec-solidity": "^0.0.7",
     "multiaddr": "^6.0.6",
     "openzeppelin-solidity": "^2.2.0",
     "openzeppelin-test-helpers": "^0.1.5",
