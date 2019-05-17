@@ -8,7 +8,6 @@ var WorkerpoolRegistry   = artifacts.require("iexec-poco/WorkerpoolRegistry");
 
 var PriceOracle          = artifacts.require("PriceOracle");
 var PriceOracleRequester = artifacts.require("PriceOracleRequester");
-var IexecRequesterProxy  = artifacts.require("IexecRequesterProxy");
 
 module.exports = async function(deployer, network, accounts)
 {
@@ -96,11 +95,4 @@ module.exports = async function(deployer, network, accounts)
 	await deployer.deploy(PriceOracleRequester, IexecHubInstance.address);
 	PriceOracleRequesterInstance = await PriceOracleRequester.deployed();
 	console.log("PriceOracleRequester deployed at address: " + PriceOracleRequesterInstance.address);
-
-	await deployer.link(IexecODBLibOrders, IexecRequesterProxy);
-	// await deployer.deploy(IexecRequesterProxy);
-	// await deployer.deploy(IexecRequesterProxy, IexecHubInstance.address);
-	// IexecRequesterProxyInstance = await IexecRequesterProxy.deployed();
-	// console.log("IexecRequesterProxy deployed at address: " + IexecRequesterProxyInstance.address);
-
 };

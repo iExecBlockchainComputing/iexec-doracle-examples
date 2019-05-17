@@ -1,8 +1,8 @@
 pragma solidity ^0.5.8;
 pragma experimental ABIEncoderV2;
 
-import "../libs/Buffer.sol";
-import "../PriceOracle.sol";
+import "./libs/Buffer.sol";
+import "./PriceOracle.sol";
 
 contract PriceOracleRequester is PriceOracle
 {
