@@ -1,0 +1,9 @@
+version: '2'
+services:
+  doracle-daemon:
+    image: iexechub/iexec-doracle-daemon:latest
+    environment:
+      - DORACLE_ADDR=xxx
+      - MNEMONIC=xxx
+      - PROVIDER=xxx
+    restart: unless-stopped
