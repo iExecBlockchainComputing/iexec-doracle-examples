@@ -1,10 +1,12 @@
 import { ethers } from 'ethers';
 import * as utils from './utils';
 
-const PriceOracle = require('../build/contracts/PriceOracle.json');
 const IexecHub    = require('iexec-poco/build/contracts/IexecHub.json');
 const IexecClerk  = require('iexec-poco/build/contracts/IexecClerk.json');
 const IERC734     = require('iexec-poco/build/contracts/IERC734.json');
+// const PriceOracle = require('../build/contracts/PriceOracle.json');
+
+const PriceOracle = { abi:[{"constant":true,"inputs":[{"name":"_identity","type":"address"},{"name":"_hash","type":"bytes32"},{"name":"_signature","type":"bytes"}],"name":"verifySignature","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_authorizedApp","type":"address"},{"name":"_authorizedDataset","type":"address"},{"name":"_authorizedWorkerpool","type":"address"},{"name":"_requiredtag","type":"bytes32"},{"name":"_requiredtrust","type":"uint256"}],"name":"updateEnv","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"m_authorizedApp","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"results","type":"bytes"}],"name":"decodeResults","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"pure","type":"function"},{"constant":false,"inputs":[{"name":"_doracleCallId","type":"bytes32"},{"name":"","type":"bytes"}],"name":"receiveResult","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"renounceOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"m_authorizedDataset","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"isOwner","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"m_iexecClerk","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"m_iexecHub","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"m_authorizedWorkerpool","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"bytes32"}],"name":"values","outputs":[{"name":"oracleCallID","type":"bytes32"},{"name":"date","type":"uint256"},{"name":"value","type":"uint256"},{"name":"details","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"m_requiredtrust","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_oracleCallID","type":"bytes32"}],"name":"processResult","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"m_requiredtag","outputs":[{"name":"","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"_iexecHubAddr","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"id","type":"bytes32"},{"indexed":true,"name":"oracleCallID","type":"bytes32"},{"indexed":false,"name":"oldDate","type":"uint256"},{"indexed":false,"name":"oldValue","type":"uint256"},{"indexed":false,"name":"newDate","type":"uint256"},{"indexed":false,"name":"newValue","type":"uint256"}],"name":"ValueChange","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"doracleCallId","type":"bytes32"}],"name":"ResultReady","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"previousOwner","type":"address"},{"indexed":true,"name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"}]};
 
 export default class Daemon
 {
@@ -13,6 +15,8 @@ export default class Daemon
 	doracle:    ethers.Contract;
 	iexechub:   ethers.Contract;
 	iexecclerk: ethers.Contract;
+	requester:  string;
+
 	settings:
 	{
 		authorizedApp:        string,
@@ -23,10 +27,11 @@ export default class Daemon
 		GROUPMEMBER_PURPOSE:  number,
 	};
 
-	constructor(address: string, wallet: ethers.Wallet)
+	constructor(address: string, wallet: ethers.Wallet, requester: string = null)
 	{
-		this.address = address;
-		this.wallet  = wallet;
+		this.address   = address;
+		this.wallet    = wallet;
+		this.requester = requester;
 	}
 
 	async start(listener: boolean = true) : Promise<void>
@@ -84,6 +89,11 @@ export default class Daemon
 	{
 			let task = await this.iexechub.viewTask(doracleCallId);
 			let deal = await this.iexecclerk.viewDeal(task.dealid);
+
+			if (this.requester)
+			{
+				utils.require(deal.requester == this.requester, "requester filtered (this is not an error)");
+			}
 
 			utils.require(task.status == 3, "result-not-available");
 			utils.require(task.resultDigest == ethers.utils.keccak256(task.results), "result-not-validated-by-consensus");
