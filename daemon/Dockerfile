@@ -13,7 +13,7 @@ WORKDIR /app
 # copy project files
 COPY . .
 
-# install utilities. I currently like yarn
+# install utilities
 RUN npm install -g yarn ts-node typescript
 
 # install dependencies

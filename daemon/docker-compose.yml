@@ -4,6 +4,7 @@ services:
     image: iexechub/iexec-doracle-daemon:latest
     environment:
       - DORACLE_ADDR=xxx
-      - MNEMONIC=xxx
+      - MNEMONIC=xxxx
       - PROVIDER=xxx
+      - REQUESTER=xxxx
     restart: unless-stopped

@@ -9,6 +9,6 @@ let private_key: string                 = process.env.MNEMONIC;
 let provider: ethers.providers.Provider = ethers.getDefaultProvider(process.env.PROVIDER);
 
 let wallet: ethers.Wallet               = new ethers.Wallet(private_key, provider);
-let daemon: Daemon                      = new Daemon(doracle_addr, wallet);
+let daemon: Daemon                      = new Daemon(doracle_addr, wallet, process.env.REQUESTER);
 
 daemon.start();
