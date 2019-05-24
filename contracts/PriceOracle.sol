@@ -6,7 +6,7 @@ import "iexec-doracle-base/contracts/IexecDoracle.sol";
 
 contract PriceOracle is Ownable, IexecDoracle
 {
-	struct timedValue
+	struct TimedValue
 	{
 		bytes32 oracleCallID;
 		uint256 date;
@@ -14,7 +14,7 @@ contract PriceOracle is Ownable, IexecDoracle
 		string  details;
 	}
 
-	mapping(bytes32 => timedValue) public values;
+	mapping(bytes32 => TimedValue) public values;
 
 	event ValueUpdated(
 		bytes32 indexed id,

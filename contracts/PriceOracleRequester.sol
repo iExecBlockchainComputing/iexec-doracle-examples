@@ -32,7 +32,7 @@ contract PriceOracleRequester is PriceOracle
 		string memory _asset2,
 		uint256       _decimal,
 		uint256       _timestamp)
-	public view returns (string memory)
+	public pure returns (string memory)
 	{
 		Buffer.buffer memory buf;
 		buf.init(256);
