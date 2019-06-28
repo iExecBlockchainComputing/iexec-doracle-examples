@@ -27,6 +27,7 @@
     "openzeppelin-solidity": "^2.2.0",
     "openzeppelin-test-helpers": "^0.1.5",
     "rlc-faucet-contract": "^2.0.0",
+    "truffle": "^5.0.25",
     "truffle-hdwallet-provider": "^1.0.12"
   }
 }
