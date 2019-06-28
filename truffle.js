@@ -41,7 +41,7 @@ module.exports =
 		kovan: {
 			provider: () => new HDWalletProvider(process.env.MNEMONIC, "https://kovan.infura.io/v3/f3e0664e01504f5ab2b4360853ce0dc7"),
 			network_id: '42',
-			gasPrice:   10000000000, //10Gwei
+			gasPrice:   1000000000, //1Gwei
 		}
 	},
 	compilers: {
