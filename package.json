@@ -18,11 +18,11 @@
   "license": "ISC",
   "homepage": "https://github.com/iExecBlockchainComputing/price-feed-doracle.git#readme",
   "dependencies": {
-    "iexec-doracle-base": "^0.0.6",
+    "iexec-doracle-base": "0.0.8",
     "iexec-poco": "^3.0.35",
-    "iexec-solidity": "^0.0.7",
-    "openzeppelin-solidity": "^2.2.0",
-    "truffle": "^5.0.25",
-    "truffle-hdwallet-provider": "^1.0.12"
+    "iexec-solidity": "0.0.17",
+    "openzeppelin-solidity": "^2.4.0",
+    "truffle": "^5.0.43",
+    "truffle-hdwallet-provider": "^1.0.17"
   }
 }
