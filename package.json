@@ -1,6 +1,6 @@
 {
   "name": "price-feed-doracle",
-  "version": "5.2.0",
+  "version": "5.1.2",
   "description": "Contracts and tools for the iExec based price feed DOracle",
   "repository": {
     "type": "git",
