@@ -1,27 +1,28 @@
 specVersion: 0.0.2
-description: PriceFeedOracle-Kovan
+description: PriceFeedOracle
 repository: https://github.com/iExecBlockchainComputing/price-feed-doracle
 schema:
   file: ./schema.graphql
 dataSources:
   - name: PriceOracle
     kind: ethereum/contract
-    network: kovan
+    network: goerli
     source:
-      address: '0x3b9F1a9aeCb1991f3818f45bd4CC735f4BEE93Ac'
-      abi: PriceOracleLegacy
+      address: '0xB2bb24cEa9aA32c0555F934C57145414286b70f0' # safe
+      abi: PriceOracle
+      # startBlock: 3020000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
         - Asset
         - Pair
         - Quotation
       abis:
-        - name: PriceOracleLegacy
-          file: abi/PriceOracleLegacy.json
+        - name: PriceOracle
+          file: ../build/contracts/PriceOracle.json
       eventHandlers:
-        - event: ValueChange(indexed bytes32,indexed bytes32,uint256,uint256,uint256,uint256)
-          handler: handleValueChange
+        - event: ValueUpdated(indexed bytes32,indexed bytes32,uint256,int256)
+          handler: handleValueUpdated
       file: ./src/priceoracle.ts

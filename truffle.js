@@ -1,27 +1,73 @@
+var HDWalletProvider = require("@truffle/hdwallet-provider");
+
+var useEnv = !!process.env.MNEMONIC;
+
 module.exports =
 {
-	plugins: [ "truffle-security" ],
+	plugins:
+	[
+		"solidity-coverage",
+		"truffle-plugin-security"
+	],
+	api_keys:
+	{
+		etherscan: process.env.ETHERSCAN
+	},
 	networks:
 	{
 		development:
 		{
-			host:       "localhost",
-			port:       8545,
-			network_id: "*",         // Match any network id,
-			gasPrice:   22000000000, //22Gwei
-		},
-		coverage:
-		{
-			host:       "localhost",
-			port:       8555,          // <-- If you change this, also set the port option in .solcover.js.
+			provider:   useEnv ? () => new HDWalletProvider(process.env.MNEMONIC, process.env.DEV_NODE || "http://localhost:8545") : undefined,
+			host:       useEnv ? undefined : "localhost",
+			port:       useEnv ? undefined : 8545,
 			network_id: "*",
-			gas:        0xFFFFFFFFFFF, // <-- Use this high gas value
-			gasPrice:   0x01           // <-- Use this low gas price
+			gasPrice:   8000000000, // 8 Gwei
+		},
+		mainnet:
+		{
+			provider: () => new HDWalletProvider(process.env.MNEMONIC, process.env.MAINNET_NODE),
+			network_id: '1',
+			gasPrice:   8000000000, // 8 Gwei
+		},
+		ropsten:
+		{
+			provider: () => new HDWalletProvider(process.env.MNEMONIC, process.env.ROPSTEN_NODE),
+			network_id: '3',
+			gasPrice:   8000000000, // 8 Gwei
+		},
+		rinkeby:
+		{
+			provider: () => new HDWalletProvider(process.env.MNEMONIC, process.env.RINKEBY_NODE),
+			network_id: '4',
+			gasPrice:   8000000000, // 8 Gwei
+		},
+		goerli:
+		{
+			provider: () => new HDWalletProvider(process.env.MNEMONIC, process.env.GOERLI_NODE),
+			network_id: '5',
+			gasPrice:   8000000000, // 8 Gwei
+		},
+		kovan: {
+			provider: () => new HDWalletProvider(process.env.MNEMONIC, process.env.KOVAN_NODE),
+			network_id: '42',
+			gasPrice:   8000000000, // 8 Gwei
+		},
+		viviani: {
+			provider: () => new HDWalletProvider(process.env.MNEMONIC, process.env.VIVIANI_NODE),
+			network_id: '133',
+			gasPrice:   '0', // 0 Gwei
+			gas:        '6700000',
+		},
+		bellecour: {
+			provider: () => new HDWalletProvider(process.env.MNEMONIC, process.env.BELLECOUR_NODE),
+			network_id: '134',
+			gasPrice:   '0', // 0 Gwei
+			gas:        '6700000',
 		}
 	},
 	compilers: {
 		solc: {
-			version: "0.5.16",
+			version: "0.6.11",
 			settings: {
 				optimizer: {
 					enabled: true,

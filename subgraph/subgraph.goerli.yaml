@@ -6,22 +6,24 @@ schema:
 dataSources:
   - name: PriceOracle
     kind: ethereum/contract
-    network: mainnet
+    network: goerli
     source:
-      address: '0xeD4A0189511859427c33dCc7C85Fdd36575aE946'
-      abi: PriceOracleLegacy
+      address: '0xB2bb24cEa9aA32c0555F934C57145414286b70f0' # safe
+      # address: '0x2760E0CE853b3FfE8d55A6642e597D466A00C8f0' # unsafe
+      abi: PriceOracle
+      startBlock: 3020000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
         - Asset
         - Pair
         - Quotation
       abis:
-        - name: PriceOracleLegacy
-          file: abi/PriceOracleLegacy.json
+        - name: PriceOracle
+          file: ../build/contracts/PriceOracle.json
       eventHandlers:
-        - event: ValueChange(indexed bytes32,indexed bytes32,uint256,uint256,uint256,uint256)
-          handler: handleValueChange
+        - event: ValueUpdated(indexed bytes32,indexed bytes32,uint256,int256)
+          handler: handleValueUpdated
       file: ./src/priceoracle.ts
