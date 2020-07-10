@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.6.0;
 pragma experimental ABIEncoderV2;
 
@@ -23,9 +24,8 @@ contract PriceOracle is IexecDoracle, Ownable, IOracleConsumer, IERC2362
 	// Event
 	event ValueUpdated(bytes32 indexed id, bytes32 indexed oracleCallID, uint256 date, int256 value);
 
-	// Use _iexecHubAddr to force use of custom iexechub, leave 0x0 for autodetect
-	constructor(address _iexecHubAddr)
-	public IexecDoracle(_iexecHubAddr)
+	constructor()
+	public IexecDoracle(address(0))
 	{}
 
 	function updateEnv(

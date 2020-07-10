@@ -7,7 +7,7 @@ module.exports =
 	plugins:
 	[
 		"solidity-coverage",
-		"truffle-plugin-security"
+		"truffle-plugin-verify"
 	],
 	api_keys:
 	{

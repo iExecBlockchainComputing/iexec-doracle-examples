@@ -42,7 +42,6 @@ module.exports = async function(deployer, network, accounts)
 	await factoryDeployer(
 		PriceOracle,
 		{
-			args: [ '0x0000000000000000000000000000000000000000' ],
 			salt: process.env.SALT,
 			call: web3.eth.abi.encodeFunctionCall(PriceOracle._json.abi.find(e => e.name == 'transferOwnership'), [ accounts[0] ]),
 			// call: web3.eth.abi.encodeFunctionCall(PriceOracle._json.abi.find(e => e.name == 'updateEnv'), [
