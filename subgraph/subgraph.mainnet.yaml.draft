@@ -8,7 +8,7 @@ dataSources:
     kind: ethereum/contract
     network: goerli
     source:
-      address: '0xB2bb24cEa9aA32c0555F934C57145414286b70f0' # safe
+      address: '0x5C7D728795E812C478F6494ab082578073807eA5'
       abi: PriceOracle
       # startBlock: 3020000
     mapping:
