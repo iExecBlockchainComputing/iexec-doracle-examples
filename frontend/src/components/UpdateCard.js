@@ -185,7 +185,7 @@ const UpdateCard = (props) =>
 			</Modal>
 
 			<Modal show={modal2} onHide={() => setModal2(false)} size='lg' centered className='layer2' backdropClassName='layer2'>
-				<Modal.Header>
+				<Modal.Header closeButton>
 					<Modal.Title>
 						Request order
 					</Modal.Title>
