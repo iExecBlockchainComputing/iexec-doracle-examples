@@ -33,7 +33,7 @@ const Update_Summary = (props) =>
 	}
 
 	return (
-		<Grid container spacing={6} justify='center' alignItems='center' style={{ margin: 0, width: '100%' }}>
+		<Grid container spacing={3} justify='center' alignItems='center' style={{ margin: 0, width: '100%' }}>
 			<Grid item xs={12}>
 				<h2 className='text-center'>Update request summary</h2>
 			</Grid>

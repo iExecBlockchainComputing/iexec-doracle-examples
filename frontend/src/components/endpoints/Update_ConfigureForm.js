@@ -34,7 +34,7 @@ const Update_ConfigureForm = (props) =>
 				<h2 className='text-center'>Configure update request</h2>
 			</Grid>
 
-			<Grid item xs={6}>
+			<Grid item xs={12} sm={10} md={8} lg={6}>
 				<Card>
 					<CardContent>
 						<Grid container spacing={3} justify='center' alignItems='center'>

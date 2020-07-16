@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter as Router, Route, Redirect } from 'react-router-dom';
+import { MemoryRouter as Router, Route, Redirect } from 'react-router-dom';
 
 import endpoints from './endpoints';
 
