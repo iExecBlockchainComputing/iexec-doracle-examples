@@ -1,8 +1,8 @@
 import React    from 'react';
 import Table    from 'react-bootstrap/Table'
-import Provider from '../tools/Provider';
-import Query    from '../tools/Query';
-import graphql  from '../graphql';
+import Provider from '../../tools/Provider';
+import Query    from '../../tools/Query';
+import graphql  from '../../graphql';
 
 const formatDate = (timestamp) => new Date(parseInt(timestamp)).toLocaleString('fr-Fr')
 

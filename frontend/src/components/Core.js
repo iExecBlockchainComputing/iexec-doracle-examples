@@ -1,25 +1,14 @@
-import React      from 'react';
-import Container  from 'react-bootstrap/Container';
-import Col        from 'react-bootstrap/Col'
-import Row        from 'react-bootstrap/Row'
+import React from 'react';
+import { HashRouter as Router, Route, Redirect } from 'react-router-dom';
 
-import UpdateCard from './UpdateCard';
-import PriceFeed  from './PriceFeed';
+import endpoints from './endpoints';
 
 const Core = (props) =>
-	<Container>
-		<UpdateCard config={props.config}/>
-		<Row>
-			<Col sm={12} md={6}>
-				<h3>Trusted oracle - latest values</h3>
-				<PriceFeed uri='https://api.thegraph.com/subgraphs/name/amxx/price-feed-doracle' config={props.config}/>
-			</Col>
-			<Col sm={12} md={6}>
-				<h3>Basic oracle - latest values</h3>
-				<PriceFeed uri='https://api.thegraph.com/subgraphs/name/amxx/price-feed-doracle' config={props.config}/>
-			</Col>
-		</Row>
-	</Container>
+	<Router>
+		<Route exact path='/'><Redirect to='/dashboard'/></Route>
+		<Route path='/dashboard'     render={ (routing) => <endpoints.Dashboard routing={routing} {...props}/> }/>
+		<Route path='/update/:step?' render={ (routing) => <endpoints.Update    routing={routing} {...props}/> }/>
+	</Router>
 
 
 export default Core;

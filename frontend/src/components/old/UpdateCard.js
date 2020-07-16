@@ -45,29 +45,30 @@ const UpdateCard = (props) =>
 	React.useEffect(() => {
 		mode && setEndpoint(`https://us.market-api.kaiko.io/v1/data/trades.v1/spot_direct_exchange_rate/${base}/${quote}/recent?interval=1m&limit=720`);
 		setPairID(`Price-${base}/${quote}-${precision}`);
-	}, [ base, quote, precision, mode ]);
+	}, [ base, quote, precision, mode, setEndpoint, setPairID ]);
 
 	React.useEffect(() => {
-		!mode && setEndpoint(props.config.default_endpoint);
-	}, [ mode, props.config.default_endpoint ])
+		!mode && setEndpoint(props.config.variants.basic.endpoint);
+	}, [ mode, props.config.variants.basic.endpoint ])
 
 	React.useEffect(() => {
 		setOrder({
-			__app:      mode   ? 'trusted app'                         : 'untrusted app',
-			app:        mode   ? props.config.addresses.app.trusted    : props.config.addresses.app.basic,
-			__callback: oracle ? 'trusted oracle'                      : 'untrusted oracle',
-			callback:   mode   ? props.config.addresses.oracle.trusted : props.config.addresses.oracle.basic,
+			__app:      mode   ? 'trusted app'                        : 'untrusted app',
+			app:        mode   ? props.config.variants.trusted.app    : props.config.variants.basic.app,
+			__callback: oracle ? 'trusted oracle'                     : 'untrusted oracle',
+			callback:   mode   ? props.config.variants.trusted.oracle : props.config.variants.basic.oracle,
 			params:
 			{
 				iexec_args: [ base, quote, precision, !mode && JSON.stringify(endpoint || 'missing endpoint') ].filter(Boolean).join(' '),
 				...props.config.requestArgs,
 			}
 		})
-	}, [ modal2 ])
+	}, [ mode, oracle, base, quote, precision, endpoint, setOrder, props.config ])
 
 	const submit = () =>
 	{
 		console.log(submit)
+		console.log(order)
 	}
 
 	return (
