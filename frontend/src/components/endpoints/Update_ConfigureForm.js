@@ -1,4 +1,5 @@
 import React      from 'react';
+import queryString from 'query-string';
 import Grid        from '@material-ui/core/Grid';
 import Card        from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -8,24 +9,25 @@ import MenuItem    from '@material-ui/core/MenuItem';
 
 const Update_ConfigureForm = (props) =>
 {
-	const [ base,      setBase      ] = React.useState(props.config.assets[0]);
-	const [ quote,     setQuote     ] = React.useState(props.config.assets[1]);
-	const [ precision               ] = React.useState(9);
-	const [ endpoint,  setEndpoint  ] = React.useState('');
-	const [ pairID,    setPairID    ] = React.useState('');
+	const [state                 ] = React.useState(queryString.parse(props.routing.location.search));
+	const [base,      setBase    ] = React.useState(props.config.assets[0]);
+	const [quote,     setQuote   ] = React.useState(props.config.assets[1]);
+	const [precision             ] = React.useState(9);
+	const [endpoint,  setEndpoint] = React.useState('');
+	const [pairID,    setPairID  ] = React.useState('');
 
 	const invert       = () => { setBase(quote); setQuote(base); }
 	const updateBase   = (newBase ) => { (newBase === quote) ? invert() : setBase(newBase)   }
 	const updateQuote  = (newQuote) => { (newQuote === base) ? invert() : setQuote(newQuote) }
 
 	React.useEffect(() => {
-		props.state.app && setEndpoint(`https://us.market-api.kaiko.io/v1/data/trades.v1/spot_direct_exchange_rate/${base}/${quote}/recent?interval=1m&limit=720`);
+		state.app === 'true' && setEndpoint(`https://us.market-api.kaiko.io/v1/data/trades.v1/spot_direct_exchange_rate/${base}/${quote}/recent?interval=1m&limit=720`);
 		setPairID(`Price-${base}/${quote}-${precision}`);
-	}, [ base, quote, precision, props ]);
+	}, [ state, base, quote, precision, props ]);
 
 	React.useEffect(() => {
-		!props.state.app && setEndpoint(props.config.variants.basic.endpoint);
-	}, [ props ])
+		state.app !== 'true' && setEndpoint(props.config.variants.basic.endpoint);
+	}, [ state, props ])
 
 	return (
 		<Grid container spacing={6} justify='center' alignItems='center' style={{ margin: 0, width: '100%' }}>
@@ -84,13 +86,13 @@ const Update_ConfigureForm = (props) =>
 									onChange={ev => setEndpoint(ev.target.value)}
 									variant='outlined'
 									fullWidth
-									disabled={props.state.app}
+									disabled={state.app === 'true'}
 								/>
 							</Grid>
 
 							<Grid item xs={12}>
 								<Button
-									onClick={() => { props.update({ quote, base, precision, endpoint }); props.forward(); }}
+									onClick={() => props.update(Object.assign(state, { quote, base, precision, endpoint }))}
 									variant='contained'
 									fullWidth
 								>

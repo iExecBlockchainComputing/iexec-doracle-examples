@@ -1,4 +1,5 @@
 import React       from 'react';
+import queryString from 'query-string';
 import Grid        from '@material-ui/core/Grid';
 import Card        from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -7,10 +8,15 @@ import logo from '../../assets/iExec-logo-vertical-white@2x.png';
 
 const Update_SelectOracle = (props) =>
 {
-	const submit = (oracle) => {
-		props.update({ oracle });
-		props.forward();
-	}
+	const [state             ] = React.useState(queryString.parse(props.routing.location.search));
+	const [oracle, setOracle ] = React.useState(null);
+
+	React.useEffect(() => {
+		if (oracle != null)
+		{
+			props.update(Object.assign(state, { oracle }));
+		}
+	}, [state, oracle, props]);
 
 	return (
 		<Grid container spacing={3} justify='center' alignItems='center' style={{ margin: 0, width: '100%' }}>
@@ -19,7 +25,7 @@ const Update_SelectOracle = (props) =>
 			</Grid>
 			<Grid item xs={6} sm={5} md={4} lg={3}>
 				<Card>
-					<CardContent style={{ backgroundColor: '#444444' }} role='button' onClick={() => submit(true)} className='p-0'>
+					<CardContent style={{ backgroundColor: '#444444' }} role='button' onClick={() => setOracle(true)} className='p-0'>
 						<Grid container justify='center' alignItems='center' style={{ height: 160 }}>
 							<img src={logo} width='128' alt='secure'/>
 						</Grid>
@@ -33,7 +39,7 @@ const Update_SelectOracle = (props) =>
 			</Grid>
 			<Grid item xs={6} sm={5} md={4} lg={3}>
 				<Card>
-					<CardContent style={{ backgroundColor: '#444444' }} role='button' onClick={() => submit(false)} className='p-0'>
+					<CardContent style={{ backgroundColor: '#444444' }} role='button' onClick={() => setOracle(false)} className='p-0'>
 						<Grid container justify='center' alignItems='center' style={{ height: 160 }}>
 							<img src={logo} width='128' alt='basic'/>
 						</Grid>

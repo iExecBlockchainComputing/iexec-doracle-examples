@@ -1,4 +1,5 @@
 import React                from 'react';
+import queryString          from 'query-string';
 import Grid                 from '@material-ui/core/Grid';
 import Button               from '@material-ui/core/Button';
 import ui                   from '../UI';
@@ -9,27 +10,29 @@ import secure_smartcontract from '../../offchain-tee-kaiko-pricefeed/solidity/Pr
 
 const Update_Summary = (props) =>
 {
-	const [ order, setOrder ] = React.useState(null);
+
+	const [state          ] = React.useState(queryString.parse(props.routing.location.search));
+	const [order, setOrder] = React.useState(null);
 
 	React.useEffect(() => {
 		setOrder({
-			__app:      props.state.app    ? 'trusted app'                        : 'untrusted app',
-			app:        props.state.app    ? props.config.variants.trusted.app    : props.config.variants.basic.app,
-			__callback: props.state.oracle ? 'trusted oracle'                     : 'untrusted oracle',
-			callback:   props.state.oracle ? props.config.variants.trusted.oracle : props.config.variants.basic.oracle,
+			__app:      state.app    === 'true' ? 'trusted app'                        : 'untrusted app',
+			app:        state.app    === 'true' ? props.config.variants.trusted.app    : props.config.variants.basic.app,
+			__callback: state.oracle === 'true' ? 'trusted oracle'                     : 'untrusted oracle',
+			callback:   state.oracle === 'true' ? props.config.variants.trusted.oracle : props.config.variants.basic.oracle,
 			params:
 			{
-				iexec_args: [ props.state.base, props.state.quote, props.state.precision, !props.state.app && JSON.stringify(props.state.endpoint || 'missing endpoint') ].filter(Boolean).join(' '),
+				iexec_args: [ state.base, state.quote, state.precision, state.app !== 'true' && JSON.stringify(state.endpoint || 'missing endpoint') ].filter(Boolean).join(' '),
 				...props.config.requestArgs,
 			}
 		})
-	}, [ props ])
+	}, [ state, props ])
 
 	const submit = () =>
 	{
 		console.log(submit);
 		console.log(order);
-		props.forward();
+		props.update(state);
 	}
 
 	return (
@@ -40,10 +43,10 @@ const Update_Summary = (props) =>
 			<Grid item container spacing={6} justify='center' alignItems='stretch'>
 				<Grid item xs={6}>
 					<ui.SourceTabs tabs={{
-						application:   { title: 'Application',    source: props.state.app ? secure_application   : null },
-						dockerfile:    { title: 'Dockerfile',     source: props.state.app ? secure_dockerfile    : null },
-						protect:       { title: 'Protect-fs',     source: props.state.app ? secure_protectfs     : null },
-						smartcontract: { title: 'Smart Contract', source: props.state.app ? secure_smartcontract : null },
+						application:   { title: 'Application',    source: JSON.parse(state.app)    ? secure_application   : null },
+						dockerfile:    { title: 'Dockerfile',     source: JSON.parse(state.app)    ? secure_dockerfile    : null },
+						protect:       { title: 'Protect-fs',     source: JSON.parse(state.app)    ? secure_protectfs     : null },
+						smartcontract: { title: 'Smart Contract', source: JSON.parse(state.oracle) ? secure_smartcontract : null },
 					}} />
 				</Grid>
 				<Grid item container xs={6}>

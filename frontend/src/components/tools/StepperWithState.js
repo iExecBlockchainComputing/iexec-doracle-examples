@@ -5,39 +5,31 @@ import Step      from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 
 const StepperWithState = (props) =>
-{
-	const [ state, setState ] = React.useState({});
-	const update = (obj) =>  setState({ ...state, ...obj });
-	return (
-		<>
+	<>
+		{
+			props.stepper &&
+			<Stepper activeStep={Object.keys(props.steps).indexOf(props.routing.match.url)} className='w-100'>
 			{
-				props.stepper &&
-				<Stepper activeStep={Object.keys(props.steps).indexOf(props.routing.match.params.step)} className='w-100'>
-				{
-					Object.entries(props.steps).map(([ key, value ], i) =><Step key={i}><StepLabel>{value.descr || key}</StepLabel></Step>)
-				}
-				</Stepper>
+				Object.entries(props.steps).map(([ key, value ], i) =><Step key={i}><StepLabel>{value.descr || key}</StepLabel></Step>)
 			}
-			<Route exact path='/update'><Redirect to={`${props.base}/${Object.keys(props.steps).find(Boolean)}`}/></Route>
-			{
-				Object.entries(props.steps).map(([ key, value ], i, array) =>
-					<Route
-						key    = {i}
-						path   = {`${props.base}/${key}`}
-						render = {(routing) =>
-							<value.component
-								state   = {state}
-								update  = {update}
-								forward = {() => array[i+1] && routing.history.push(`${props.base}/${array[i+1][0]}`)}
-								routing = {routing}
-								{...props}
-							/>
-						}
-					/>
-				)
-			}
-		</>
-	);
-}
+			</Stepper>
+		}
+		<Route exact path={props.base}><Redirect to={Object.keys(props.steps).find(Boolean)}/></Route>
+		{
+			Object.entries(props.steps).map(([ key, value ], i, array) =>
+				<Route
+					key = {i}
+					path = {key}
+					render = {(routing) =>
+						<value.component
+							routing = {routing}
+							update = {(state) => routing.history.push(Object.entries(state).reduce((acc, [key, value]) => acc.replace(`:${key}`, value), value.next || ''))}
+							{...props}
+						/>
+					}
+				/>
+			)
+		}
+	</>
 
 export default StepperWithState;
