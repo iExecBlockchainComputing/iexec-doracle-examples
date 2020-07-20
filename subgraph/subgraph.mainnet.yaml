@@ -6,11 +6,11 @@ schema:
 dataSources:
   - name: PriceOracle
     kind: ethereum/contract
-    network: goerli
+    network: mainnet
     source:
-      address: '0x5C7D728795E812C478F6494ab082578073807eA5'
+      address: '0x3eF657EC7f51B18e69B00a8F8F2752Ee90493c3b'
       abi: PriceOracle
-      # startBlock: 3020000
+      startBlock: 10498800
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
