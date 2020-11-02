@@ -1,6 +1,5 @@
 node_modules
 build
-!PriceOracle.json
 
 package-lock.json
 yarn.lock

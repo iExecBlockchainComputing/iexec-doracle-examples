@@ -4,8 +4,8 @@ import Grid                 from '@material-ui/core/Grid';
 import Button               from '@material-ui/core/Button';
 import ui                   from '../UI';
 import secure_application   from '../../offchain-tee-kaiko-pricefeed/src/app.py.txt';
-import secure_dockerfile    from '../../offchain-tee-kaiko-pricefeed/tee/Dockerfile.txt';
-import secure_protectfs     from '../../offchain-tee-kaiko-pricefeed/tee/protect-fs.sh.txt';
+// import secure_dockerfile    from '../../offchain-tee-kaiko-pricefeed/tee/Dockerfile.txt';
+// import secure_protectfs     from '../../offchain-tee-kaiko-pricefeed/tee/protect-fs.sh.txt';
 import secure_smartcontract from '../../offchain-tee-kaiko-pricefeed/solidity/PriceOracle.sol.txt';
 
 const Update_Summary = (props) =>
@@ -44,8 +44,8 @@ const Update_Summary = (props) =>
 				<Grid item xs={6}>
 					<ui.SourceTabs tabs={{
 						application:   { title: 'Application',    source: JSON.parse(state.app)    ? secure_application   : null },
-						dockerfile:    { title: 'Dockerfile',     source: JSON.parse(state.app)    ? secure_dockerfile    : null },
-						protect:       { title: 'Protect-fs',     source: JSON.parse(state.app)    ? secure_protectfs     : null },
+						// dockerfile:    { title: 'Dockerfile',     source: JSON.parse(state.app)    ? secure_dockerfile    : null },
+						// protect:       { title: 'Protect-fs',     source: JSON.parse(state.app)    ? secure_protectfs     : null },
 						smartcontract: { title: 'Smart Contract', source: JSON.parse(state.oracle) ? secure_smartcontract : null },
 					}} />
 				</Grid>

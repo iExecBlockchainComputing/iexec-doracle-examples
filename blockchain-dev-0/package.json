@@ -1,0 +1,23 @@
+{
+  "name": "@iexec/blockchain-dev-0",
+  "version": "1.0.0",
+  "author": "iExec",
+  "license": "Apache-2.0",
+  "scripts": {
+    "compile": "oz compile",
+    "lint": "solhint --max-warnings 0 \"contracts/**/*.sol\"",
+    "test": "mocha 'test/*.spec.js' --exit --recursive --timeout 10000"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "^0.19.0",
+    "@graphprotocol/graph-ts": "^0.19.0",
+    "@iexec/doracle": "^5.1.2",
+    "@openzeppelin/cli": "^2.8.2",
+    "@openzeppelin/test-environment": "^0.1.6",
+    "@openzeppelin/test-helpers": "^0.5.9",
+    "chai": "^4.2.0",
+    "ganache-cli": "^6.12.1",
+    "mocha": "^8.2.0",
+    "solhint": "^3.3.1"
+  }
+}
