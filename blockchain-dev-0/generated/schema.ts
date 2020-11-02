@@ -233,4 +233,13 @@ export class ValueReceived extends Entity {
   set oracleCallID(value: Bytes) {
     this.set("oracleCallID", Value.fromBytes(value));
   }
+
+  get isValid(): boolean {
+    let value = this.get("isValid");
+    return value.toBoolean();
+  }
+
+  set isValid(value: boolean) {
+    this.set("isValid", Value.fromBoolean(value));
+  }
 }

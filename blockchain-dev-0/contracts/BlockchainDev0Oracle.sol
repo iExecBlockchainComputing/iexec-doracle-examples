@@ -30,7 +30,7 @@ contract BlockchainDev0Oracle is IexecDoracle, Ownable, IOracleConsumer
     uint256 public latestValue;
 
     // Event
-    event ValueReceived(bytes32 indexed oracleCallID, uint256 date, uint256 value);
+    event ValueReceived(bytes32 indexed oracleCallID, uint256 date, uint256 value, bool isValid);
 
     // Use _iexecHubAddr to force use of custom iexechub, leave 0x0 for autodetect
     constructor(address _iexecHubAddr)
@@ -53,11 +53,11 @@ contract BlockchainDev0Oracle is IexecDoracle, Ownable, IOracleConsumer
     function receiveResult(bytes32 _callID, bytes calldata)
     external override
     {
-        // Parse results
-        (uint256 date, uint256 value) = abi.decode(_iexecDoracleGetVerifiedResult(_callID), (uint256, uint256));
-        emit ValueReceived(_callID, date, value);
+        (bool success, bytes memory results) = _iexecDoracleGetResults(_callID);
+        (uint256 date, uint256 value) = abi.decode(results, (uint256, uint256));
+        emit ValueReceived(_callID, date, value, success);
 
-        if (latestDate < date)
+        if (success && latestDate < date)
         {
             latestDate  = date;
             latestValue = value;

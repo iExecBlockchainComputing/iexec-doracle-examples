@@ -33,4 +33,5 @@ type ValueReceived implements Event @entity
 	value:                        BigInt!
 	date:                         BigInt!
 	oracleCallID:                 Bytes!
+	isValid:                      Boolean!
 }

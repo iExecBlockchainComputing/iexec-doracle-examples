@@ -6,7 +6,10 @@
   "scripts": {
     "compile": "oz compile",
     "lint": "solhint --max-warnings 0 \"contracts/**/*.sol\"",
-    "test": "mocha 'test/*.spec.js' --exit --recursive --timeout 10000"
+    "test": "mocha 'test/*.spec.js' --exit --recursive --timeout 10000",
+    "build:contracts": "yarn lint && yarn compile",
+    "build:subgraph": "graph codegen && graph build",
+    "build": "yarn build:contracts && yarn build:subgraph"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.19.0",

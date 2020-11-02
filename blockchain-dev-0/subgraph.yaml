@@ -26,7 +26,7 @@ dataSources:
         - name: IexecInterface
           file: ./node_modules/@iexec/interface/build/contracts/IexecInterfaceToken.json
       eventHandlers:
-        - event: ValueReceived(indexed bytes32,uint256,uint256)
+        - event: ValueReceived(indexed bytes32,uint256,uint256,bool)
           handler: handleValueReceived
       file: ./src/index.ts
   - name: Oracle_1
@@ -51,6 +51,6 @@ dataSources:
         - name: IexecInterface
           file: ./node_modules/@iexec/interface/build/contracts/IexecInterfaceToken.json
       eventHandlers:
-        - event: ValueReceived(indexed bytes32,uint256,uint256)
+        - event: ValueReceived(indexed bytes32,uint256,uint256,bool)
           handler: handleValueReceived
       file: ./src/index.ts

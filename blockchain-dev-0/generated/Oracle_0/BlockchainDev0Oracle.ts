@@ -56,6 +56,10 @@ export class ValueReceived__Params {
   get value(): BigInt {
     return this._event.parameters[2].value.toBigInt();
   }
+
+  get isValid(): boolean {
+    return this._event.parameters[3].value.toBoolean();
+  }
 }
 
 export class BlockchainDev0Oracle extends ethereum.SmartContract {
