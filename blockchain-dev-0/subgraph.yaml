@@ -1,0 +1,56 @@
+specVersion: 0.0.2
+description: BlockchainDev0Oracle
+repository: https://github.com/iExecBlockchainComputing/blockchain-dev-0
+schema:
+  file: ./schema.graphql
+dataSources:
+  - name: Oracle_0
+    kind: ethereum/contract
+    network: goerli
+    source:
+      # address: '0xTODO'
+      abi: BlockchainDev0Oracle
+      startBlock: 0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Account
+        - Oracle
+        - Transaction
+        - ValueReceived
+      abis:
+        - name: BlockchainDev0Oracle
+          file: ./build/contracts/BlockchainDev0Oracle.json
+        - name: IexecInterface
+          file: ./node_modules/@iexec/interface/build/contracts/IexecInterfaceToken.json
+      eventHandlers:
+        - event: ValueReceived(indexed bytes32,uint256,uint256)
+          handler: handleValueReceived
+      file: ./src/index.ts
+  - name: Oracle_1
+    kind: ethereum/contract
+    network: goerli
+    source:
+      # address: '0xTODO'
+      abi: BlockchainDev0Oracle
+      startBlock: 0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Account
+        - Oracle
+        - Transaction
+        - ValueReceived
+      abis:
+        - name: BlockchainDev0Oracle
+          file: ./build/contracts/BlockchainDev0Oracle.json
+        - name: IexecInterface
+          file: ./node_modules/@iexec/interface/build/contracts/IexecInterfaceToken.json
+      eventHandlers:
+        - event: ValueReceived(indexed bytes32,uint256,uint256)
+          handler: handleValueReceived
+      file: ./src/index.ts

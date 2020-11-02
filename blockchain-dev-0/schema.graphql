@@ -1,0 +1,36 @@
+interface Event
+{
+	id:                           ID!
+	transaction:                  Transaction!
+}
+
+type Transaction @entity
+{
+	id:                           ID!
+	timestamp:                    BigInt!
+	blockNumber:                  BigInt!
+	events:                       [Event!]! @derivedFrom(field: "transaction")
+}
+
+type Oracle @entity
+{
+	id:                           ID!
+	values:                       [ValueReceived!]! @derivedFrom(field: "oracle")
+}
+
+type Account @entity
+{
+	id:                           ID!
+	values:                       [ValueReceived!]! @derivedFrom(field: "requester")
+}
+
+type ValueReceived implements Event @entity
+{
+	id:                           ID!
+	transaction:                  Transaction!
+	oracle:                       Oracle!
+	requester:                    Account!
+	value:                        BigInt!
+	date:                         BigInt!
+	oracleCallID:                 Bytes!
+}
