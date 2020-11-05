@@ -33,7 +33,8 @@ export function logTransaction(event: ethereum.Event): Transaction {
 
 export function handleValueReceived(event: ValueReceivedEvent): void {
 	let proxy = BlockchainDev0Oracle.bind(event.address).iexecproxy()
-	let deal  = IexecInterface.bind(proxy).viewDeal(event.params.oracleCallID)
+	let task  = IexecInterface.bind(proxy).viewTask(event.params.oracleCallID)
+	let deal  = IexecInterface.bind(proxy).viewDeal(task.dealid)
 
 	let oracle = new Oracle(event.address.toHex())
 	oracle.save()
