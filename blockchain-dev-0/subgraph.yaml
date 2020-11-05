@@ -8,9 +8,9 @@ dataSources:
     kind: ethereum/contract
     network: goerli
     source:
-      # address: '0xTODO'
+      address: '0xE8D31EC3C238EB7439f70F7a5783a4B0bBaf9d6a'
       abi: BlockchainDev0Oracle
-      startBlock: 0
+      startBlock: 3700000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -33,9 +33,9 @@ dataSources:
     kind: ethereum/contract
     network: goerli
     source:
-      # address: '0xTODO'
+      address: '0xBbc5CA8Feb84203f66Cb34DB6C8cA8F4Bad412c7'
       abi: BlockchainDev0Oracle
-      startBlock: 0
+      startBlock: 3700000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
