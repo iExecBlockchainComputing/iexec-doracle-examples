@@ -16,6 +16,6 @@
 
 
 
-# graph create iexecblockchaincomputing/iexec-blockchain-dev-0 --node http://thegraph.iex.ec:8020
-# graph deploy iexecblockchaincomputing/iexec-blockchain-dev-0 --node http://thegraph.iex.ec:8020      --ipfs http://thegraph.iex.ec:5001    subgraph.yaml;
-graph deploy iexecblockchaincomputing/iexec-blockchain-dev-0 --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ subgraph.yaml;
+# graph create iexecblockchaincomputing/iexec-blockchain-dev0 --node http://thegraph.iex.ec:8020
+# graph deploy iexecblockchaincomputing/iexec-blockchain-dev0 --node http://thegraph.iex.ec:8020      --ipfs http://thegraph.iex.ec:5001    subgraph.yaml;
+graph deploy iexecblockchaincomputing/iexec-blockchain-dev0 --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ subgraph.yaml;
