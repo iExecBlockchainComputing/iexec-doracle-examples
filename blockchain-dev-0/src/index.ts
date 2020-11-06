@@ -50,5 +50,6 @@ export function handleValueReceived(event: ValueReceivedEvent): void {
 	ev.value        = event.params.value
 	ev.oracleCallID = event.params.oracleCallID
 	ev.isValid      = event.params.isValid
+	ev.error        = event.params.error
 	ev.save()
 }

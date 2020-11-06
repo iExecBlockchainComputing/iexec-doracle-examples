@@ -8,7 +8,7 @@ dataSources:
     kind: ethereum/contract
     network: goerli
     source:
-      address: '0xE8D31EC3C238EB7439f70F7a5783a4B0bBaf9d6a'
+      address: '0x6AE52219895cf0E5DBab7c67ca18063E0af8b4f2'
       abi: BlockchainDev0Oracle
       startBlock: 3700000
     mapping:
@@ -26,14 +26,14 @@ dataSources:
         - name: IexecInterface
           file: ./node_modules/@iexec/interface/build/contracts/IexecInterfaceToken.json
       eventHandlers:
-        - event: ValueReceived(indexed bytes32,uint256,uint256,bool)
+        - event: ValueReceived(indexed bytes32,uint256,uint256,bool,string)
           handler: handleValueReceived
       file: ./src/index.ts
   - name: Oracle_1
     kind: ethereum/contract
     network: goerli
     source:
-      address: '0xBbc5CA8Feb84203f66Cb34DB6C8cA8F4Bad412c7'
+      address: '0x9695E5DdB933dfAea1B237e0340bf581F7E0FBa2'
       abi: BlockchainDev0Oracle
       startBlock: 3700000
     mapping:
@@ -51,6 +51,6 @@ dataSources:
         - name: IexecInterface
           file: ./node_modules/@iexec/interface/build/contracts/IexecInterfaceToken.json
       eventHandlers:
-        - event: ValueReceived(indexed bytes32,uint256,uint256,bool)
+        - event: ValueReceived(indexed bytes32,uint256,uint256,bool,string)
           handler: handleValueReceived
       file: ./src/index.ts

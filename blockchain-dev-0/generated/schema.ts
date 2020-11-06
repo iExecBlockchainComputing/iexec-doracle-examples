@@ -242,4 +242,13 @@ export class ValueReceived extends Entity {
   set isValid(value: boolean) {
     this.set("isValid", Value.fromBoolean(value));
   }
+
+  get error(): string {
+    let value = this.get("error");
+    return value.toString();
+  }
+
+  set error(value: string) {
+    this.set("error", Value.fromString(value));
+  }
 }

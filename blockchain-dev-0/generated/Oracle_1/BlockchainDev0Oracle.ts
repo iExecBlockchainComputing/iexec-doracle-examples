@@ -60,6 +60,10 @@ export class ValueReceived__Params {
   get isValid(): boolean {
     return this._event.parameters[3].value.toBoolean();
   }
+
+  get error(): string {
+    return this._event.parameters[4].value.toString();
+  }
 }
 
 export class BlockchainDev0Oracle extends ethereum.SmartContract {
