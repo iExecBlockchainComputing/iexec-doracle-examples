@@ -16,6 +16,8 @@
  * limitations under the License.                                             *
  ******************************************************************************/
 
+// The following code is a dummy contract, it is to be used only for validation and testing purposes
+
 pragma solidity ^0.8.3;
 pragma experimental ABIEncoderV2;
 
